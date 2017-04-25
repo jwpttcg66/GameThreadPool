@@ -5,6 +5,7 @@ package com.snowcattle.game.thread.executor;
  */
 
 
+import com.snowcattle.game.thread.ThreadNameFactory;
 import com.snowcattle.game.thread.worker.AbstractWork;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -21,6 +22,11 @@ public class NonOrderedQueuePoolExecutor extends ThreadPoolExecutor {
     public NonOrderedQueuePoolExecutor(int corePoolSize) {
         super(corePoolSize, corePoolSize*2, 30, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>());
+    }
+
+    public NonOrderedQueuePoolExecutor(String name, int corePoolSize) {
+        super(corePoolSize, corePoolSize*2, 30, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(), new ThreadNameFactory(name));
     }
 
     public void executeWork(AbstractWork work) {
