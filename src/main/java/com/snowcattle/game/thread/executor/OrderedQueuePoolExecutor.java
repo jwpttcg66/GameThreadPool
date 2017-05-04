@@ -44,8 +44,12 @@ public class OrderedQueuePoolExecutor extends ThreadPoolExecutor {
         synchronized (queue) {
             if (maxQueueSize > 0) {
                 if (queue.size() > maxQueueSize) {
-                    logger.error("队列" + threadNameFactory.getNamePrefix() + "(" + key + ")" + "抛弃指令!");
-                    queue.clear();
+//                    logger.error("队列" + threadNameFactory.getNamePrefix() + "(" + key + ")" + "抛弃指令!");
+//                    queue.clear();
+                    //不可以清空队列里的任务
+                    if(logger.isWarnEnabled()){
+                        logger.warn("队列" + threadNameFactory.getNamePrefix() + "(" + key + ")" + "超过最大队列大小设置!");
+                    }
                 }
             }
             result = queue.add(task);
