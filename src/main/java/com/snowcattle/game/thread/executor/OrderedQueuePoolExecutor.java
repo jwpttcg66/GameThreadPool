@@ -8,6 +8,7 @@ import com.snowcattle.game.thread.worker.TasksQueue;
 import org.slf4j.Logger;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -20,19 +21,37 @@ public class OrderedQueuePoolExecutor extends ThreadPoolExecutor {
 
     private OrderedQueuePool<Long, AbstractWork> pool = new OrderedQueuePool<Long, AbstractWork>();
 
-    private int maxQueueSize;
+    private int maxTaskQueueSize;
     private ThreadNameFactory threadNameFactory;
 
     public OrderedQueuePoolExecutor(String name, int corePoolSize,
-                                    int maxQueueSize) {
+                                    int maxTaskQueueSize) {
         super(corePoolSize, 2 * corePoolSize, 30, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(), new ThreadNameFactory(name));
-        this.maxQueueSize = maxQueueSize;
+        this.maxTaskQueueSize = maxTaskQueueSize;
         this.threadNameFactory = (ThreadNameFactory) getThreadFactory();
     }
 
+    public OrderedQueuePoolExecutor(String name, int corePoolSize, int maxSize,
+                                    int maxTaskQueueSize, RejectedExecutionHandler rejectedExecutionHandler) {
+        super(corePoolSize, maxSize, 30, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(), new ThreadNameFactory(name), rejectedExecutionHandler);
+        this.maxTaskQueueSize = maxTaskQueueSize;
+        this.threadNameFactory = (ThreadNameFactory) getThreadFactory();
+    }
+
+    public OrderedQueuePoolExecutor(String name, int corePoolSize,
+                                    int maxTaskQueueSize, RejectedExecutionHandler rejectedExecutionHandler) {
+        super(corePoolSize, 2 * corePoolSize, 30, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(), new ThreadNameFactory(name), rejectedExecutionHandler);
+        this.maxTaskQueueSize = maxTaskQueueSize;
+        this.threadNameFactory = (ThreadNameFactory) getThreadFactory();
+    }
+
+
     /**
      * 增加执行任务
+     *
      * @param key
      * @param value
      * @return
@@ -42,12 +61,12 @@ public class OrderedQueuePoolExecutor extends ThreadPoolExecutor {
         boolean run = false;
         boolean result = false;
         synchronized (queue) {
-            if (maxQueueSize > 0) {
-                if (queue.size() > maxQueueSize) {
+            if (maxTaskQueueSize > 0) {
+                if (queue.size() > maxTaskQueueSize) {
 //                    logger.error("队列" + threadNameFactory.getNamePrefix() + "(" + key + ")" + "抛弃指令!");
 //                    queue.clear();
                     //不可以清空队列里的任务
-                    if(logger.isWarnEnabled()){
+                    if (logger.isWarnEnabled()) {
                         logger.warn("队列" + threadNameFactory.getNamePrefix() + "(" + key + ")" + "超过最大队列大小设置!");
                     }
                 }
