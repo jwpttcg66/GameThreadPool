@@ -14,7 +14,7 @@ import java.util.concurrent.*;
  */
 public class GameThreadPoolHelpFactory {
 
-    private RejectedExecutionHandler createPolicy(RejectedPolicyType rejectedPolicyType) {
+    public RejectedExecutionHandler createPolicy(RejectedPolicyType rejectedPolicyType) {
 
         switch (rejectedPolicyType) {
             case BLOCKING_POLICY:
@@ -32,7 +32,7 @@ public class GameThreadPoolHelpFactory {
         return null;
     }
 
-    private BlockingQueue<Runnable> createBlockingQueue(BlockingQueueType blockingQueueType, int queues) {
+    public BlockingQueue<Runnable> createBlockingQueue(BlockingQueueType blockingQueueType, int queues) {
 
         switch (blockingQueueType) {
             case LINKED_BLOCKING_QUEUE:
