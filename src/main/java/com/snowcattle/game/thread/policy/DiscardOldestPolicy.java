@@ -8,16 +8,16 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * Created by jwp on 2017/3/8.
  */
-public class RejectedPolicy extends ThreadPoolExecutor.DiscardPolicy {
+public class DiscardOldestPolicy extends ThreadPoolExecutor.DiscardOldestPolicy {
     private static final Logger logger = Loggers.threadLogger;
 
-    private final String threadName;
+    private String threadName;
 
-    public RejectedPolicy() {
+    public DiscardOldestPolicy() {
         this(null);
     }
 
-    public RejectedPolicy(String threadName) {
+    public DiscardOldestPolicy(String threadName) {
         this.threadName = threadName;
     }
 
@@ -29,3 +29,4 @@ public class RejectedPolicy extends ThreadPoolExecutor.DiscardPolicy {
         super.rejectedExecution(runnable, executor);
     }
 }
+

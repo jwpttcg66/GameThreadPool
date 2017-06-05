@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created by jwp on 2017/3/8.
+ * 阻塞
  */
 
 public class BlockingPolicy implements RejectedExecutionHandler {
