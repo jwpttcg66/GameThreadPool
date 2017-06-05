@@ -22,7 +22,6 @@ public enum RejectedPolicyType {
     DISCARD_OLDEST_POLICY("DiscardOldestPolicy"),
     /*删除*/
     DISCARD_POLICY("DiscardPolicy");
-
     private String value;
 
     private RejectedPolicyType(String value) {
