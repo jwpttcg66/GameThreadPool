@@ -23,7 +23,7 @@ public class DiscardPolicy extends ThreadPoolExecutor.DiscardPolicy {
 
     public void rejectedExecution(Runnable runnable, ThreadPoolExecutor executor) {
         if (threadName != null) {
-            logger.error("RPC Thread pool [{}] is exhausted, executor={}", threadName, executor.toString());
+            logger.error("hread pool [{}] is exhausted, executor={}", threadName, executor.toString());
         }
 
         super.rejectedExecution(runnable, executor);

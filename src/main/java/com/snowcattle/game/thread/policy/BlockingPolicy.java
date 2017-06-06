@@ -26,7 +26,7 @@ public class BlockingPolicy implements RejectedExecutionHandler {
 
     public void rejectedExecution(Runnable runnable, ThreadPoolExecutor executor) {
         if (threadName != null) {
-            logger.error("RPC Thread pool [{}] is exhausted, executor={}", threadName, executor.toString());
+            logger.error("Thread pool [{}] is exhausted, executor={}", threadName, executor.toString());
         }
 
         if (!executor.isShutdown()) {
