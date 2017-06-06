@@ -1,16 +1,14 @@
 package com.snowcattle.game.thread.executor;
 
 import com.snowcattle.game.common.constants.Loggers;
+import com.snowcattle.game.common.enums.BlockingQueueType;
 import com.snowcattle.game.thread.ThreadNameFactory;
 import com.snowcattle.game.thread.worker.AbstractWork;
 import com.snowcattle.game.thread.worker.OrderedQueuePool;
 import com.snowcattle.game.thread.worker.TasksQueue;
 import org.slf4j.Logger;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Created by jiangwenping on 17/3/10.
@@ -32,9 +30,9 @@ public class OrderedQueuePoolExecutor extends ThreadPoolExecutor {
         this.threadNameFactory = (ThreadNameFactory) getThreadFactory();
     }
 
-    public OrderedQueuePoolExecutor(String name, int corePoolSize, int maxSize,
+    public OrderedQueuePoolExecutor(String name, int corePoolSize, int maxPoolSize,
                                     int maxTaskQueueSize, RejectedExecutionHandler rejectedExecutionHandler) {
-        super(corePoolSize, maxSize, 30, TimeUnit.SECONDS,
+        super(corePoolSize, maxPoolSize, 30, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(), new ThreadNameFactory(name), rejectedExecutionHandler);
         this.maxTaskQueueSize = maxTaskQueueSize;
         this.threadNameFactory = (ThreadNameFactory) getThreadFactory();
@@ -48,6 +46,13 @@ public class OrderedQueuePoolExecutor extends ThreadPoolExecutor {
         this.threadNameFactory = (ThreadNameFactory) getThreadFactory();
     }
 
+    public OrderedQueuePoolExecutor(String name, int corePoolSize,
+                                    int maxTaskQueueSize, BlockingQueue blockingQueue, RejectedExecutionHandler rejectedExecutionHandler) {
+        super(corePoolSize, 2 * corePoolSize, 30, TimeUnit.SECONDS,
+                blockingQueue, new ThreadNameFactory(name), rejectedExecutionHandler);
+        this.maxTaskQueueSize = maxTaskQueueSize;
+        this.threadNameFactory = (ThreadNameFactory) getThreadFactory();
+    }
 
     /**
      * 增加执行任务

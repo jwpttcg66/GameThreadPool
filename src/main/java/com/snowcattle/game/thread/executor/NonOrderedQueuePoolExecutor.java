@@ -8,10 +8,7 @@ package com.snowcattle.game.thread.executor;
 import com.snowcattle.game.thread.ThreadNameFactory;
 import com.snowcattle.game.thread.worker.AbstractWork;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 无序队列线程池
@@ -30,14 +27,20 @@ public class NonOrderedQueuePoolExecutor extends ThreadPoolExecutor {
                 new LinkedBlockingQueue<Runnable>(), new ThreadNameFactory(name));
     }
 
-    public NonOrderedQueuePoolExecutor(String name, int corePoolSize, int maxSize) {
-        super(corePoolSize, maxSize, 30, TimeUnit.SECONDS,
+    public NonOrderedQueuePoolExecutor(String name, int corePoolSize, int maxPoolSize) {
+        super(corePoolSize, maxPoolSize, 30, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(), new ThreadNameFactory(name));
     }
 
     public NonOrderedQueuePoolExecutor(String name, int corePoolSize, int maxSize, RejectedExecutionHandler rejectedExecutionHandler) {
         super(corePoolSize, maxSize, 30, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(), new ThreadNameFactory(name), rejectedExecutionHandler);
+    }
+
+
+    public NonOrderedQueuePoolExecutor(String name, int corePoolSize, int maxSize, BlockingQueue blockingQueue, RejectedExecutionHandler rejectedExecutionHandler) {
+        super(corePoolSize, maxSize, 30, TimeUnit.SECONDS,
+                blockingQueue, new ThreadNameFactory(name), rejectedExecutionHandler);
     }
 
     public void executeWork(AbstractWork work) {
