@@ -15,17 +15,18 @@ public class ThreadPoolTest {
 
     public static void main(String[] args) throws Exception{
         int coreSize = 1;
-        int maxSize = 10;
+        int maxSize = 100;
         long time = 1;
         TimeUnit timeUnit = TimeUnit.SECONDS;
         LinkedBlockingQueue linkedBlockingQueue = new LinkedBlockingQueue();
-        ArrayBlockingQueue arrayBlockingQueue = new ArrayBlockingQueue(1);
+        ArrayBlockingQueue arrayBlockingQueue = new ArrayBlockingQueue(5);
         BlockingQueue blockingQueue = arrayBlockingQueue;
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(coreSize, maxSize, time, timeUnit, blockingQueue, rejectedExecutionHandler());
-        int threadSize = 10;
+        int threadSize = 100;
         for(int i = 0; i < threadSize; i++){
             try {
-                threadPoolExecutor.execute(new TestRunnable());
+//                threadPoolExecutor.execute(new TestRunnable());
+                threadPoolExecutor.execute(new TestRunnable2(i));
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -36,6 +37,6 @@ public class ThreadPoolTest {
     public static RejectedExecutionHandler rejectedExecutionHandler(){
         GameThreadPoolHelpFactory gameThreadPoolHelpFactory = new GameThreadPoolHelpFactory();
         RejectedPolicyType rejectedPolicyType = RejectedPolicyType.ABORT_POLICY;
-        return gameThreadPoolHelpFactory.createPolicy(rejectedPolicyType);
+        return gameThreadPoolHelpFactory.createPolicy(rejectedPolicyType, "test");
     }
 }
