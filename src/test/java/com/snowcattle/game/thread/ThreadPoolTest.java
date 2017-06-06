@@ -15,17 +15,17 @@ public class ThreadPoolTest {
 
     public static void main(String[] args) throws Exception{
         int coreSize = 1;
-        int maxSize = 1;
-        long time = 30;
+        int maxSize = 10;
+        long time = 1;
         TimeUnit timeUnit = TimeUnit.SECONDS;
         LinkedBlockingQueue linkedBlockingQueue = new LinkedBlockingQueue();
-//        ArrayBlockingQueue arrayBlockingQueue = new ArrayBlockingQueue(1);
-        BlockingQueue blockingQueue = linkedBlockingQueue;
+        ArrayBlockingQueue arrayBlockingQueue = new ArrayBlockingQueue(1);
+        BlockingQueue blockingQueue = arrayBlockingQueue;
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(coreSize, maxSize, time, timeUnit, blockingQueue, rejectedExecutionHandler());
-        int threadSize = 10000;
+        int threadSize = 10;
         for(int i = 0; i < threadSize; i++){
             try {
-                threadPoolExecutor.submit(new TestRunnable());
+                threadPoolExecutor.execute(new TestRunnable());
             }catch (Exception e){
                 e.printStackTrace();
             }
