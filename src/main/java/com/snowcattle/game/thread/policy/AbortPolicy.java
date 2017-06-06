@@ -26,7 +26,7 @@ public class AbortPolicy extends ThreadPoolExecutor.AbortPolicy {
         if (threadName != null) {
             logger.error("Thread pool [{}] is exhausted, executor={}", threadName, executor.toString());
         }
-        String msg = String.format("RpcServer["
+        String msg = String.format("Server["
                         + " Thread Name: %s, Pool Size: %d (active: %d, core: %d, max: %d, largest: %d), Task: %d (completed: %d),"
                         + " Executor status:(isShutdown:%s, isTerminated:%s, isTerminating:%s)]",
                 threadName, executor.getPoolSize(), executor.getActiveCount(), executor.getCorePoolSize(), executor.getMaximumPoolSize(), executor.getLargestPoolSize(),
